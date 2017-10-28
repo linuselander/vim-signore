@@ -65,14 +65,16 @@ function! s:get_ignore_rules(dir) " {{{
 endfunction "}}}
 
 function! s:format_rules(rules) " {{{
-  if g:signore#use_ctrlp_format == 0
-    return a:rules
-  endif  
   let formatted_rules = []
   for rule in a:rules
     let formatted_rule = rule
-    let formatted_rule = substitute(formatted_rule, "^", "*\/", "")
-    let formatted_rule = substitute(formatted_rule, "\/$", "\/*", "")
+    if g:signore#use_ctrlp_format == 1
+      let formatted_rule = substitute(formatted_rule, "^", "*\/", "")
+      let formatted_rule = substitute(formatted_rule, "\/$", "\/*", "")
+    else
+      let formatted_rule = substitute(formatted_rule, "^", "**\/", "")
+      let formatted_rule = substitute(formatted_rule, "\/$", "\/*", "")
+    endif  
     call add(formatted_rules, formatted_rule)
   endfor
   return formatted_rules
